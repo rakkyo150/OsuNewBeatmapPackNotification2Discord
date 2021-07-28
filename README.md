@@ -2,7 +2,7 @@
 osuSTDのビートマップパックの更新があったらwebhookに通知を投げるやつ。<br>
 Discord以外で動くかは分からないです。<br>
 最初の実行では１ページ目のすべてのosuSTDのビートマップパックが通知されますが、以降は更新分だけ通知されます。<br>
-Herokuでデプロイできるようにrequrements.txtとruntime.txtは入れているので、各自でデプロイして使ってください。
+Herokuでデプロイできるようにrequirements.txtとruntime.txtは入れているので、各自でデプロイして使ってください。
 
 デプロイに際して、postgreSQLを使えるようにしてください。<br>
 Herokuだと、Heroku Postgresのアドオンを追加すればオッケーです。<br>
