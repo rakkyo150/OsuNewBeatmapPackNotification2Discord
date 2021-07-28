@@ -22,4 +22,4 @@ def exportOldBeatmapPack():
     oldDataPackId=cur.fetchone()
     con.commit()
     con.close()
-    return oldDataPackId
+    return oldDataPackId[0]
