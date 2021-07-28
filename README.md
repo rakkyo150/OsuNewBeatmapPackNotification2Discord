@@ -1,0 +1,10 @@
+# OsuNewBeatmapPackNotification2Discord
+osuSTDのビートマップパックの更新があったらwebhookに通知を投げるやつ。<br>
+Discord以外で動くかは分からないです。<br>
+基本的に各自でデプロイして使ってください。
+
+デプロイに際して、pistgreSQLを使えるようにしてください。<br>
+また、環境変数としては、DATABASE_URLにはpostgreSQLのURLを設定し、WEBHOOK_URLにディスコートのwebhookのURLを設定してください。<br>
+あとは、各自好きな間隔でpython main.pyで定期実行するように設定をしてください。
+
+もしデプロイとかよくわからないけど使いたい人がいれば、その旨を伝えてもらえればwebhookのURLを登録するだけで使えるようにしようと思っています。
