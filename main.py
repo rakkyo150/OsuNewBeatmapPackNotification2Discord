@@ -23,18 +23,27 @@ if oldDataPackId==topDataPackId:
     pass
 else:
     newPacksName=""
+    newPack=False
     packDivs=packList.find_all("div",class_="beatmap-pack")
     for pack in packDivs:
-        # 更新内容にosuSTDとそれ以外で分けてnewPacksNameを作る
-        packName=pack.a.div.text
-        if any(words in packName.lower() for words in avoidWord):
-            pass
+        # 直近の更新までループが終わったとき
+        if str(pack.get("data-pack-id"))==oldDataPackId:
+            # 更新あったとき
+            if newPack is True:
+                db_handler.upsertNewBeatmapPack(oldDataPackId,topDataPackId)
+            break
         else:
-            newPacksName+=pack.a.div.text+"\n"
+            newPack=True
+            # 更新内容をosu!stdとそれ以外で分けてnewPacksNameを作る
+            packName=pack.a.div.text
+            if any(words in packName.lower() for words in avoidWord):
+                pass
+            else:
+                newPacksName+=pack.a.div.text+"\n"
 
-    # 更新内容がosuSTD以外しかない場合はディスコートに通知しない
+    # 更新内容がosu!std以外しかないorそもそも更新していない場合はディスコートに通知しない
     if newPacksName=="":
-        db_handler.upsertNewBeatmapPack(topDataPackId)
+        pass
     else:
         content=f"ビートマップパック更新！\n{newPacksName}"
 
@@ -45,5 +54,3 @@ else:
         headers={"Content-Type": "application/json"}
 
         requests.post(webhookUrl,json.dumps(payload),headers=headers)
-
-        db_handler.upsertNewBeatmapPack(topDataPackId)

@@ -3,13 +3,13 @@ import os
 
 
 
-def upsertNewBeatmapPack(dataPackId):
+def upsertNewBeatmapPack(oldDataPackId,newDataPackId):
     link=os.environ["DATABASE_URL"]
     con=psycopg2.connect(link)
     cur=con.cursor()
     cur.execute("CREATE TABLE IF NOT EXISTS osuNewBeatmapPack(dataPackId TEXT)")
-    cur.execute("DELETE FROM osuNewBeatmapPack WHERE title=%s",(dataPackId,))
-    cur.execute("INSERT INTO osuNewBeatmapPack (title) VALUES (%s)",(dataPackId,))
+    cur.execute("DELETE FROM osuNewBeatmapPack WHERE title=%s",(oldDataPackId,))
+    cur.execute("INSERT INTO osuNewBeatmapPack (title) VALUES (%s)",(newDataPackId,))
     con.commit()
     con.close()
 
