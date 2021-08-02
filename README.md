@@ -12,3 +12,6 @@ Herokuなら、DATABASE_URLはHeroku Postgresを追加した時点で自動で�
 Herokuだと、Heroku Schedulerのアドオンを追加して設定すればオッケーです。
 
 もしデプロイとかよくわからないけど使いたい人がいれば、その旨を伝えてもらえればwebhookのURLを登録するだけで使えるようにしようと思っています。
+
+## Change Log
+バグ修正(2021/7/29)
