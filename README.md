@@ -15,3 +15,4 @@ Herokuだと、Heroku Schedulerのアドオンを追加して設定すればオ�
 
 ## Change Log
 バグ修正(2021/7/29)
+さらにバグ修正(2021/8/2)
