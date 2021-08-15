@@ -16,4 +16,4 @@ Herokuだと、Heroku Schedulerのアドオンを追加して設定すればオ�
 ## Change Log
 バグ修正(2021/7/29)<br>
 さらにバグ修正(2021/8/2)<br>
-URL(https://osu.ppy.sh/beatmaps/packs)も通知内容に含めました(2021/8/16)<br>
+URL (https://osu.ppy.sh/beatmaps/packs) も通知内容に含めました(2021/8/16)<br>
