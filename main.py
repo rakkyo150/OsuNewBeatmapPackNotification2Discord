@@ -45,7 +45,7 @@ else:
     if newPacksName=="":
         pass
     else:
-        content=f"ビートマップパック更新！\n{newPacksName}"
+        content=f"ビートマップパック更新！\nhttps://osu.ppy.sh/beatmaps/packs\n{newPacksName}"
 
         webhookUrl = os.environ["WEBHOOK_URL"]
         payload={
