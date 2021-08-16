@@ -13,6 +13,7 @@ import db_handler
 link="https://osu.ppy.sh/beatmaps/packs"
 
 options=Options()
+options.add_argument("--headless")
 
 driver=webdriver.Chrome(executable_path=os.environ["CHROME_DRIVER"],options=options)
 # 暗黙的待機
@@ -69,8 +70,8 @@ if oldDataPackId is None:
             packContentSoup=BeautifulSoup(packContentHtml,"html.parser")
             packDownloadA=packContentSoup.find("a",class_="beatmap-pack-download__link")
 
-            content="初実行！\nhttps://osu.ppy.sh/beatmaps/packs"
-            description=packName+"\n"+packDownloadA.get("href")
+            content="**初実行！**\nhttps://osu.ppy.sh/beatmaps/packs"
+            description="**"+packName+"**\n"+packDownloadA.get("href")
 
             webhookUrl = os.environ["WEBHOOK_URL"]
             payload = {
@@ -114,13 +115,13 @@ else:
                 packContentSoup = BeautifulSoup(packContentHtml, "html.parser")
                 packDownloadA = packContentSoup.find("a",class_="beatmap-pack-download__link")
 
-                description+=packName+"\n"+packDownloadA.get("href")+"\n"
+                description+="**"+packName+"**\n"+packDownloadA.get("href")+"\n"
 
     # 更新内容がosu!std以外しかないorそもそも更新していない場合はディスコートに通知しない
     if description=="":
         pass
     else:
-        content=f"ビートマップパック更新！\nhttps://osu.ppy.sh/beatmaps/packs\n"
+        content=f"**ビートマップパック更新！**\nhttps://osu.ppy.sh/beatmaps/packs\n"
 
         webhookUrl = os.environ["WEBHOOK_URL"]
         payload={
