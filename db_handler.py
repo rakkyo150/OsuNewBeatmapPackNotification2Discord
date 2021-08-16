@@ -3,7 +3,7 @@ import os
 
 
 
-def upsertNewBeatmapPack(oldDataPackId,newDataPackId):
+def updateNewBeatmapPack(oldDataPackId, newDataPackId):
     link=os.environ["DATABASE_URL"]
     con=psycopg2.connect(link)
     cur=con.cursor()
@@ -22,4 +22,7 @@ def exportOldBeatmapPack():
     oldDataPackId=cur.fetchone()
     con.commit()
     con.close()
-    return oldDataPackId[0]
+    if oldDataPackId is None:
+        return None
+    else:
+        return oldDataPackId[0]
