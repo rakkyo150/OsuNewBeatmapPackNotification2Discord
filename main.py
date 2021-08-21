@@ -6,6 +6,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.by import By
 from time import sleep
 
 import db_handler
@@ -66,7 +67,7 @@ if oldDataPackId is None:
         else:
             packContentLink=pack.a.get("href")
             driver.get(packContentLink)
-            wait.until(EC.presence_of_all_elements_located)
+            wait.until(EC.presence_of_element_located((By.CLASS_NAME,"beatmap-pack-download__link")))
             packContentHtml=driver.page_source.encode("utf-8")
             packContentSoup=BeautifulSoup(packContentHtml,"html.parser")
             packDownloadA=packContentSoup.find("a",class_="beatmap-pack-download__link")
@@ -112,7 +113,7 @@ else:
             else:
                 packContentLink = pack.a.get("href")
                 driver.get(packContentLink)
-                wait.until(EC.presence_of_all_elements_located)
+                wait.until(EC.presence_of_element_located((By.CLASS_NAME,"beatmap-pack-download__link")))
                 packContentHtml = driver.page_source.encode("utf-8")
                 packContentSoup = BeautifulSoup(packContentHtml, "html.parser")
                 packDownloadA = packContentSoup.find("a",class_="beatmap-pack-download__link")
