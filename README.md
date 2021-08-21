@@ -16,6 +16,7 @@ seleniumを使用しているので、ビルドパックに https://github.com/h
 - CHROME_DRIVER:/app/.chromedriver/bin/chromedriver
 - USER_NAME:osuのアカウントのユーザーネーム
 - PASSWORD:osuのアカウントのパスワード
+
 を設定してください。<br>
 
 
