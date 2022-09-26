@@ -11,12 +11,18 @@ from time import sleep
 
 import db_handler
 
+
+from dotenv import load_dotenv
+load_dotenv()
+
 link="https://osu.ppy.sh/beatmaps/packs"
 
 options=Options()
 options.add_argument("--headless")
 
-driver=webdriver.Chrome(executable_path=os.environ["CHROME_DRIVER"],options=options)
+# driver=webdriver.Chrome(executable_path=os.environ["CHROME_DRIVER"],options=options)
+driver=webdriver.Chrome(options=options)
+
 # 暗黙的待機
 driver.implicitly_wait(10)
 wait=WebDriverWait(driver,30)
@@ -55,6 +61,7 @@ topPackName=topPackDiv.a.div.text
 avoidWord=["taiko","catch","mania"]
 
 oldDataPackId=db_handler.exportOldBeatmapPack()
+print(oldDataPackId)
 
 # 初回
 if oldDataPackId is None:
