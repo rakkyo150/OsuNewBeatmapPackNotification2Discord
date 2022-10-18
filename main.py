@@ -15,18 +15,18 @@ import db_handler
 from dotenv import load_dotenv
 load_dotenv()
 
+options=Options()
+options.add_argument("--headless")
+
+# driver=webdriver.Chrome(executable_path=os.environ["CHROME_DRIVER"],options=options)
+driver=webdriver.Chrome(options=options)
+
+# 暗黙的待機
+driver.implicitly_wait(10)
+wait=WebDriverWait(driver,30)
+
 try:
     link="https://osu.ppy.sh/beatmaps/packs"
-
-    options=Options()
-    options.add_argument("--headless")
-
-    # driver=webdriver.Chrome(executable_path=os.environ["CHROME_DRIVER"],options=options)
-    driver=webdriver.Chrome(options=options)
-
-    # 暗黙的待機
-    driver.implicitly_wait(10)
-    wait=WebDriverWait(driver,30)
 
     driver.get(link)
     wait.until(EC.presence_of_all_elements_located)
@@ -146,6 +146,7 @@ try:
 
             requests.post(webhookUrl,json.dumps(payload),headers=headers)
 
-    driver.close()
+    driver.quit()
 except Exception as e:
     print(e)
+    driver.quit()
