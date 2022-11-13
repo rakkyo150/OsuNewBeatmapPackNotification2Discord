@@ -2,12 +2,12 @@
 osu!stdのビートマップパックの更新があったらwebhookに通知を投げるやつ。<br>
 Discord以外で動くかは分からないです。<br>
 最初の実行では最新のosu!stdのビートマップパックひとつだけが通知されますが、以降は更新された分だけ通知されます。<br>
-**Herokuでデプロイする場合はmasterブランチではなくherokuブランチをお使いください。**<br>
+**Herokuでデプロイする場合はmasterブランチではなく[herokuブランチ](https://github.com/rakkyo150/OsuNewBeatmapPackNotification2Discord/tree/heroku)をお使いください。**<br>
 Herokuでデプロイできるようにrequirements.txtとruntime.txtは入れているので、各自でデプロイして使ってください。
 
 ## デプロイ方法
 
-**masterブランチではなくherokuブランチをお使いください。**
+**masterブランチではなく[herokuブランチ](https://github.com/rakkyo150/OsuNewBeatmapPackNotification2Discord/tree/heroku)をお使いください。**
 
 Heroku Postgresのアドオンを追加すればオッケーです。<br>
 Heroku Schedulerのアドオンを追加して、好きな間隔でpython main.pyを定期実行する設定をしてください。<br>
