@@ -61,6 +61,7 @@ try:
 
     avoidWord=["taiko","catch","mania"]
 
+    # oldDataPackId='for test'
     oldDataPackId=db_handler.exportOldBeatmapPack()
     print(oldDataPackId)
 
@@ -132,7 +133,7 @@ try:
         if description=="":
             pass
         else:
-            content=f"**ビートマップパック更新！**\nhttps://osu.ppy.sh/beatmaps/packs\n"
+            content=f"@everyone\n**ビートマップパック更新！**\nhttps://osu.ppy.sh/beatmaps/packs\n"
 
             webhookUrl = os.environ["WEBHOOK_URL"]
             payload={
