@@ -66,7 +66,7 @@ try:
     print(oldDataPackId)
 
     # 初回
-    if oldDataPackId is None:
+    if oldDataPackId=='':
         packDivs = packList.find_all("div", class_="beatmap-pack")
         for pack in packDivs:
             packName = pack.a.div.text
@@ -97,7 +97,7 @@ try:
                 requests.post(webhookUrl, json.dumps(payload), headers=headers)
 
                 break
-        db_handler.updateNewBeatmapPack("firstExecution", topDataPackId)
+        db_handler.updateNewBeatmapPack(topDataPackId)
 
     # 更新してるかどうか
     elif oldDataPackId==topDataPackId:
@@ -111,7 +111,7 @@ try:
             if str(pack.get("data-pack-id"))==oldDataPackId:
                 # 更新あったとき
                 if newPack is True:
-                    db_handler.updateNewBeatmapPack(oldDataPackId, topDataPackId)
+                    db_handler.updateNewBeatmapPack(topDataPackId)
                 break
             else:
                 newPack=True

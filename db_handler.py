@@ -1,28 +1,13 @@
-import psycopg2
 import os
 
-
-
-def updateNewBeatmapPack(oldDataPackId, newDataPackId):
-    link=os.environ["DATABASE_URL"]
-    con=psycopg2.connect(link)
-    cur=con.cursor()
-    cur.execute("CREATE TABLE IF NOT EXISTS osuNewBeatmapPack(dataPackId TEXT)")
-    cur.execute("DELETE FROM osuNewBeatmapPack WHERE title=%s",(oldDataPackId,))
-    cur.execute("INSERT INTO osuNewBeatmapPack (title) VALUES (%s)",(newDataPackId,))
-    con.commit()
-    con.close()
+def updateNewBeatmapPack(newDataPackId):
+    with open('data.txt','w') as data:
+        data.write(newDataPackId)
 
 def exportOldBeatmapPack():
-    link = os.environ["DATABASE_URL"]
-    con = psycopg2.connect(link)
-    cur = con.cursor()
-    cur.execute("CREATE TABLE IF NOT EXISTS osuNewBeatmapPack(title TEXT)")
-    cur.execute("SELECT * FROM osuNewBeatmapPack")
-    oldDataPackId=cur.fetchone()
-    con.commit()
-    con.close()
-    if oldDataPackId is None:
-        return None
-    else:
-        return oldDataPackId[0]
+    id=''
+    if not os.path.exists('data.txt'):
+        return id
+    with open('data.txt' ,'r') as data:
+        id=data.readline()
+        return id
