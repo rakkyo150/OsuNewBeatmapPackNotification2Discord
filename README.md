@@ -5,75 +5,89 @@ Discord以外で動くかは分からないです。<br>
 **Herokuでデプロイする場合はmasterブランチではなく[herokuブランチ](https://github.com/rakkyo150/OsuNewBeatmapPackNotification2Discord/tree/heroku)をお使いください。**<br>
 Herokuでデプロイできるようにrequirements.txtとruntime.txtは入れているので、各自でデプロイして使ってください。
 
-## 設定方法
-数か月前にやったことを思い出して書いているので、なにか抜けてる部分があるかもです。<br>
-もしエラー等があったら適宜うまく対応してもらえるとありがたいです。
+## Quick Start
+```bash
+# Comfirm
+$ python -V
+$ apt -v
+# Clone
+$ sudo apt update
+$ sudo apt install git
+$ git clone https://github.com/rakkyo150/OsuNewBeatmapPackNotification2Discord
+$ cd OsuNewBeatmapPackNotification2Discord
+# Auto Setting
+$ source initialization.sh
+# Edit cron for scheduled execution
+$ crontab -e
+```
 
-### 適当なディレクトリで以下を実行
+
+## Step by Step
+### 環境確認
+aptとpythonが使えることが前提となります<br>
+不安な方は以下のコマンド確認できます。<br>
+一応私の環境で実行した結果も表示しておきます。
+```bash
+$ python -V
+Python 3.9.2
+$ apt -v
+apt 2.2.4 (arm64)
+```
+
+### リポジトリをクローン
 ```bash
 $ sudo apt update
 $ sudo apt install git
 $ git clone https://github.com/rakkyo150/OsuNewBeatmapPackNotification2Discord
 $ cd OsuNewBeatmapPackNotification2Discord
 ```
+これ以降はOsuNewBeatmapPackNotification2Discordディレクトリ以下の操作になります。
 
-### Postgresql環境構築
-https://raspi.taneyats.com/entry/install-postgresql<br>
-上記URLの「ユーザー(ロール)にパスワードを設定」まで設定をしましょう。<br>
-その後、
+### 初回実行まで
+#### 自動
+以下のコマンドで初期設定ができます。<br>
+定期実行の設定は別で行ってください。
 ```bash
-$ su - postgres
-パスワード:
-$ createdb [好きなデータベース名]
-$ exit
+$ source initialization.sh
 ```
-でデータベースを作成しておきましょう。<br>
-参考 : https://www.postgresql.org/docs/11/reference-client.html
+うまくいかない場合のために、以下に手動で設定を行う場合の手順を示しておきます。
 
-### Chromiumインストール
+#### 手動
+1. Chromedriverインストール(chromium-browserなどは自動でダウンロードされます)
 ```bash
 $ sudo apt install chromium-chromedriver
 ```
 
-### 仮想環境構築・仮想環境に入る
+2. 仮想環境作成・ライブラリインストール
 ```bash
-$ python venv -m hogehoge[好きなフォルダ名]
-$ source hogehoge\Scripts\activate
+$ python venv -m venv[好きなフォルダ名]
+$ venv/bin/python -m pip install -r requirements.txt
 ```
 
-### ライブラリインストール
-```bash
-(hogehoge) $ pip install -r requirements.txt
-```
 
-### 環境変数設定
+3. 環境変数設定
 .envファイルを作成して、お好きなテキストエディタで編集してください。<br>
 vimなら
 ```bash
-(hogehoge) $ vim .env
+$ vim .env
 ```
 を実行した後、iを入力して編集モードに入りましょう。<br>
 そして、以下を入力してください。
 ```bash
-DATABASE_URL=postgresql://[サーバーのIPアドレス]:[postgresのポート番号でデフォルトは5432]/[作成したデータベース名]?user=[作成したユーザ名]&password=[設定したパスワード]
 WEBHOOK_URL=[DiscordのwebhookのURL]
 USER_NAME=[osuのアカウントのユーザーネーム]
 PASSWORD=[osuのアカウントのパスワード]
 ```
 入力が終わったら、escapeで編集終了で:wqで上書きできます。<br>
 
-### テスト
+4. 初回実行(テスト)
 ここまでうまく設定できていれば
 ```bash
-(hogehoge) $ hogehoge/bin/python main.py
+$ venv/bin/python main.py
 ```
 を実行してみると通知がくるはずです。<br>
-通知が来ない場合は、ここまでうまくいっているか確認してみましょう。<br>
-もう一度テストする場合は、データベースにデータが追加されている場合はそのデータは削除してからテストしてみてください。<br>
-うまくいったら仮想環境から出ても大丈夫です。
-```bash
-(hogehoge) $ deactivate
-```
+通知が来ない場合は、ここまでうまくいっているか確認してみましょう。
+
 
 ### 定期実行の設定
 ラズパイなら
@@ -94,5 +108,6 @@ URL (https://osu.ppy.sh/beatmaps/packs) も通知内容に含めました(2021/8
 初回実行時のバグを修正 & ビートマップパックごとのダウンロードURLを通知に追加 & 通知に埋め込みを使用(2021/8/16)<br>
 安定化(2021/8/19)<br>
 ダウンロードリンクがなぜか取れないことがあったのでその対策(2021/8/21)<br>
-Herokuで使用している機能が有料化されるそうなので、ラズパイなどのサーバーで使用できるようにしました(2022/9/26)
-ラズパイ用にREADME更新(2022/12/28)
+Herokuで使用している機能が有料化されるそうなので、ラズパイなどのサーバーで使用できるようにしました(2022/9/26)<br>
+ラズパイ用にREADME更新(2022/12/28)<br>
+環境構築を簡単にできるようにしました(2023/2/16)
