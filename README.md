@@ -4,6 +4,11 @@ Discord以外で動くかは分からないです。<br>
 最初の実行では最新のosu!stdのビートマップパックひとつだけが通知されますが、以降は更新された分だけ通知されます。<br>
 Herokuでデプロイできるようにrequirements.txtとruntime.txtは入れているので、各自でデプロイして使ってください。
 
+**2023年3月10日追記**<br>
+HerokuブランチはサイトのHTMLの変更に伴い、2023年3月10日ごろから正常に動作しなくなりました。<br>
+そのため、2023年3月10日現在以降はテスト環境の構築が困難なため、メンテする予定はありません。<br>
+どうしても使いたい場合は、各自で[masterブランチ](https://github.com/rakkyo150/OsuNewBeatmapPackNotification2Discord)の変更を取り込んでください。<br>
+
 ## デプロイ方法
 
 Heroku Postgresのアドオンを追加すればオッケーです。<br>
