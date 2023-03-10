@@ -56,20 +56,20 @@ try:
     packList=soup.find("div",class_="js-accordion")
     topPackDiv=packList.div
 
-    topDataPackId=topPackDiv.get("data-pack-id")
-    topPackName=topPackDiv.a.div.text
+    topDataPackTag: str = topPackDiv.get("data-pack-tag")
+    topPackName=topPackDiv.find(class_="beatmap-pack__name").text
 
     avoidWord=["taiko","catch","mania"]
 
     # oldDataPackId='for test'
-    oldDataPackId=db_handler.exportOldBeatmapPack()
-    print(oldDataPackId)
+    oldTopDataPackTag=db_handler.exportOldTopBeatmapPack()
+    print(oldTopDataPackTag)
 
     # 初回
-    if oldDataPackId=='':
+    if oldTopDataPackTag=='':
         packDivs = packList.find_all("div", class_="beatmap-pack")
         for pack in packDivs:
-            packName = pack.a.div.text
+            packName: str = pack.find(class_="beatmap-pack__name").text
 
             if any(words in packName.lower() for words in avoidWord):
                 pass
@@ -97,10 +97,10 @@ try:
                 requests.post(webhookUrl, json.dumps(payload), headers=headers)
 
                 break
-        db_handler.updateNewBeatmapPack(topDataPackId)
+        db_handler.updateNewTopBeatmapPack(topDataPackTag)
 
     # 更新してるかどうか
-    elif oldDataPackId==topDataPackId:
+    elif oldTopDataPackTag==topDataPackTag:
         pass
     else:
         description=""
@@ -108,26 +108,28 @@ try:
         packDivs=packList.find_all("div",class_="beatmap-pack")
         for pack in packDivs:
             # 直近の更新までループが終わったとき
-            if str(pack.get("data-pack-id"))==oldDataPackId:
-                # 更新あったとき
-                if newPack is True:
-                    db_handler.updateNewBeatmapPack(topDataPackId)
+            if str(pack.get("data-pack-tag"))==oldTopDataPackTag:
+                db_handler.updateNewTopBeatmapPack(topDataPackTag)
                 break
-            else:
-                newPack=True
-                # 更新内容をosu!stdとそれ以外で分けてnewPacksNameを作る
-                packName=pack.a.div.text
-                if any(words in packName.lower() for words in avoidWord):
-                    pass
-                else:
-                    packContentLink = pack.a.get("href")
-                    driver.get(packContentLink)
-                    wait.until(EC.presence_of_element_located((By.CLASS_NAME,"beatmap-pack-download__link")))
-                    packContentHtml = driver.page_source.encode("utf-8")
-                    packContentSoup = BeautifulSoup(packContentHtml, "html.parser")
-                    packDownloadA = packContentSoup.find("a",class_="beatmap-pack-download__link")
 
-                    description+="**"+packName+"**\n"+packDownloadA.get("href")+"\n"
+            newPack=True
+            # 更新内容をosu!stdとそれ以外で分けてnewPacksNameを作る
+            packName=pack.find(class_="beatmap-pack__name").text
+            if any(words in packName.lower() for words in avoidWord):
+                pass
+            else:
+                packContentLink = pack.a.get("href")
+                driver.get(packContentLink)
+                wait.until(EC.presence_of_element_located((By.CLASS_NAME,"beatmap-pack-download__link")))
+                packContentHtml = driver.page_source.encode("utf-8")
+                packContentSoup = BeautifulSoup(packContentHtml, "html.parser")
+                packDownloadA = packContentSoup.find("a",class_="beatmap-pack-download__link")
+
+                description+="**"+packName+"**\n"+packDownloadA.get("href")+"\n"
+                
+            # ページを越えないと更新においつけない場合でも最新のデータに更新を忘れないこと
+            if pack == packDivs[-1]:
+                db_handler.updateNewTopBeatmapPack(topDataPackTag)
 
         # 更新内容がosu!std以外しかないorそもそも更新していない場合はディスコートに通知しない
         if description=="":

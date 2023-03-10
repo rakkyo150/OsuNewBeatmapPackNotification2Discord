@@ -1,10 +1,10 @@
 import os
 
-def updateNewBeatmapPack(newDataPackId):
+def updateNewTopBeatmapPack(newDataPackId: str):
     with open('data.txt','w') as data:
         data.write(newDataPackId)
 
-def exportOldBeatmapPack():
+def exportOldTopBeatmapPack() -> str:
     id=''
     if not os.path.exists('data.txt'):
         return id
