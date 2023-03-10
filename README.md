@@ -5,7 +5,7 @@ Discord以外で動くかは分からないです。<br>
 **Herokuでデプロイする場合はmasterブランチではなく[herokuブランチ](https://github.com/rakkyo150/OsuNewBeatmapPackNotification2Discord/tree/heroku)をお使いください。**<br>
 Herokuでデプロイできるようにrequirements.txtとruntime.txtは入れているので、各自でデプロイして使ってください。<br>
 
-*2023年3月10日追記*
+**2023年3月10日追記**<br>
 なお、HerokuブランチはサイトのHTMLの変更に伴い、2023年3月10日ごろから正常に動作しなくなりました。<br>
 そのため、2023年3月10日現在以降はテスト環境の構築が困難なため、メンテする予定はありません。<br>
 どうしても使いたい場合は、各自でmasterブランチの変更を取り込んでください。<br>
