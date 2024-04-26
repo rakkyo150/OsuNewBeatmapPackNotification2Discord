@@ -7,6 +7,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.service import Service
 from time import sleep
 
 import db_handler
@@ -68,11 +69,14 @@ def send_notification(content, description):
     headers={"Content-Type": "application/json"}
     requests.post(webhookUrl,json.dumps(payload),headers=headers)
 
+driver_path="/usr/lib/chromium-browser/chromedriver"
+service = Service(executable_path=driver_path)
+
 options=Options()
 options.add_argument("--headless")
 
 # driver=webdriver.Chrome(executable_path=os.environ["CHROME_DRIVER"],options=options)
-driver=webdriver.Chrome(options=options)
+driver=webdriver.Chrome(service=service, options=options)
 
 # 暗黙的待機
 driver.implicitly_wait(10)
