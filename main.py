@@ -85,11 +85,10 @@ try:
     driver.get(link)
     wait.until(EC.presence_of_all_elements_located)
 
-    login_to_osu(driver, wait)
+    # login_to_osu(driver, wait)
 
     packList, topDataPackTag, topPackName = get_pack_list_info(driver)
 
-    # oldDataPackId='for test'
     oldTopDataPackTag=db_handler.exportOldTopBeatmapPack()
     print(oldTopDataPackTag)
 
@@ -102,10 +101,11 @@ try:
             if any(words in packName.lower() for words in avoidWord):
                 pass
             else:
-                packDownloadA = get_pack_download_a(driver, pack)
+                # packDownloadA = get_pack_download_a(driver, pack)
 
                 content="**初実行！**\nhttps://osu.ppy.sh/beatmaps/packs"
-                description="**"+packName+"**\n"+packDownloadA.get("href")
+                # description="**"+packName+"**\n"+packDownloadA.get("href")
+                description="**"+packName+"**"
                 send_notification(content, description)
 
                 break
@@ -130,9 +130,10 @@ try:
             if any(words in packName.lower() for words in avoidWord):
                 pass
             else:
-                packDownloadA = get_pack_download_a(driver, pack)
+                # packDownloadA = get_pack_download_a(driver, pack)
 
-                description+="**"+packName+"**\n"+packDownloadA.get("href")+"\n"
+                # description+="**"+packName+"**\n"+packDownloadA.get("href")+"\n"
+                description+="**"+packName+"**\n"
                 
             # ページを越えないと更新においつけない場合でも最新のデータに更新を忘れないこと
             if pack == packDivs[-1]:
