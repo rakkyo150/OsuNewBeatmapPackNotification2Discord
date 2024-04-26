@@ -12,9 +12,11 @@ Herokuでデプロイできるようにrequirements.txtとruntime.txtは入れ�
 
 ## Quick Start
 ```bash
+# Install Rye(Confirm the command on https://rye-up.com)
+$ curl -sSf https://rye-up.com/get | bash
 # Comfirm
-$ python -V
 $ apt -v
+$ rye version
 # Clone
 $ sudo apt update
 $ sudo apt install git
@@ -29,14 +31,16 @@ $ crontab -e
 
 ## Step by Step
 ### 環境確認
-aptとpythonが使えることが前提となります<br>
-不安な方は以下のコマンド確認できます。<br>
-一応私の環境で実行した結果も表示しておきます。
+aptと[Rye](https://rye-up.com)が使えることが前提となります<br>
+Ryeは以下のコマンドでインストールできます。<br>
+コマンドが変更されているかもなので、実行前に一応ホームページで確認してください。<br>
 ```bash
-$ python -V
-Python 3.9.2
+$ curl -sSf https://rye-up.com/get | bash
+```
+以下のコマンド確認できます。<br>
+```bash
+$ rye version
 $ apt -v
-apt 2.2.4 (arm64)
 ```
 
 ### リポジトリをクローン
@@ -65,10 +69,8 @@ $ sudo apt install chromium-chromedriver
 
 2. 仮想環境作成・ライブラリインストール
 ```bash
-$ python venv -m venv[好きなフォルダ名]
-$ venv/bin/python -m pip install -r requirements.txt
+$ rye sync
 ```
-
 
 3. 環境変数設定
 .envファイルを作成して、お好きなテキストエディタで編集してください。<br>
@@ -80,19 +82,16 @@ $ vim .env
 そして、以下を入力してください。
 ```bash
 WEBHOOK_URL=[DiscordのwebhookのURL]
-USER_NAME=[osuのアカウントのユーザーネーム]
-PASSWORD=[osuのアカウントのパスワード]
 ```
 入力が終わったら、escapeで編集終了で:wqで上書きできます。<br>
 
 4. 初回実行(テスト)
 ここまでうまく設定できていれば
 ```bash
-$ venv/bin/python main.py
+$ rye run python main.py
 ```
 を実行してみると通知がくるはずです。<br>
 通知が来ない場合は、ここまでうまくいっているか確認してみましょう。
-
 
 ### 定期実行の設定
 ラズパイなら
@@ -101,7 +100,7 @@ $ crontab -e
 ```
 から、毎時0分ごとに実行なら、最下部に
 ```cron
-0 * * * * cd OsuNewBeatmapPackNotification2Discord; hogehoge/bin/python main.py
+0 * * * * cd OsuNewBeatmapPackNotification2Discord; rye run python main.py
 ```
 を追加して上書き保存してください。<br>
 詳しくはcronの書き方を検索して調べてみてください。
@@ -116,4 +115,6 @@ URL (https://osu.ppy.sh/beatmaps/packs) も通知内容に含めました(2021/8
 Herokuで使用している機能が有料化されるそうなので、ラズパイなどのサーバーで使用できるようにしました(2022/9/26)<br>
 ラズパイ用にREADME更新(2022/12/28)<br>
 環境構築を簡単にできるようにしました(2023/2/16)<br>
-サイトのHTMLの変更に対応しました(2023/3/10)
+サイトのHTMLの変更に対応しました(2023/3/10)<br>
+ログインにreCAPTCHAが必要になったので仮対応(2024/4/27)<br>
+Ryeに移行(2024/4/27)<br>
