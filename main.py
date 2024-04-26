@@ -15,22 +15,7 @@ import db_handler
 from dotenv import load_dotenv
 load_dotenv()
 
-options=Options()
-options.add_argument("--headless")
-
-# driver=webdriver.Chrome(executable_path=os.environ["CHROME_DRIVER"],options=options)
-driver=webdriver.Chrome(options=options)
-
-# 暗黙的待機
-driver.implicitly_wait(10)
-wait=WebDriverWait(driver,30)
-
-try:
-    link="https://osu.ppy.sh/beatmaps/packs"
-
-    driver.get(link)
-    wait.until(EC.presence_of_all_elements_located)
-
+def login_to_osu(driver, wait):
     collapse=driver.find_element_by_class_name("fa-chevron-down")
     collapse.click()
     wait.until(EC.presence_of_all_elements_located)
@@ -50,16 +35,59 @@ try:
     wait.until(EC.presence_of_all_elements_located)
     # ブラウザのログイン処理待ち
     sleep(3)
-
-    response=driver.page_source.encode("utf-8")
-    soup=BeautifulSoup(response,"html.parser")
-    packList=soup.find("div",class_="js-accordion")
-    topPackDiv=packList.div
+    
+def get_pack_list_info(driver):
+    response = driver.page_source.encode("utf-8")
+    soup = BeautifulSoup(response, "html.parser")
+    packList = soup.find("div", class_="js-accordion")
+    topPackDiv = packList.div
 
     topDataPackTag: str = topPackDiv.get("data-pack-tag")
-    topPackName=topPackDiv.find(class_="beatmap-pack__name").text
+    topPackName = topPackDiv.find(class_="beatmap-pack__name").text
 
+    return packList, topDataPackTag, topPackName
+
+def get_pack_download_a(driver, pack):
+    packContentLink = pack.a.get("href")
+    driver.get(packContentLink)
+    wait.until(EC.presence_of_element_located((By.CLASS_NAME,"beatmap-pack-download__link")))
+    packContentHtml = driver.page_source.encode("utf-8")
+    packContentSoup = BeautifulSoup(packContentHtml, "html.parser")
+    packDownloadA = packContentSoup.find("a",class_="beatmap-pack-download__link")
+    return packDownloadA
+
+def send_notification(content, description):
+    webhookUrl = os.environ["WEBHOOK_URL"]
+    payload = {
+        "content": content,
+        "embeds": [{
+            "description": description,
+            "color":15753632
+        }],
+    }
+    headers={"Content-Type": "application/json"}
+    requests.post(webhookUrl,json.dumps(payload),headers=headers)
+
+options=Options()
+options.add_argument("--headless")
+
+# driver=webdriver.Chrome(executable_path=os.environ["CHROME_DRIVER"],options=options)
+driver=webdriver.Chrome(options=options)
+
+# 暗黙的待機
+driver.implicitly_wait(10)
+wait=WebDriverWait(driver,30)
+
+try:
+    link="https://osu.ppy.sh/beatmaps/packs"
     avoidWord=["taiko","catch","mania"]
+
+    driver.get(link)
+    wait.until(EC.presence_of_all_elements_located)
+
+    login_to_osu(driver, wait)
+
+    packList, topDataPackTag, topPackName = get_pack_list_info(driver)
 
     # oldDataPackId='for test'
     oldTopDataPackTag=db_handler.exportOldTopBeatmapPack()
@@ -74,27 +102,11 @@ try:
             if any(words in packName.lower() for words in avoidWord):
                 pass
             else:
-                packContentLink=pack.a.get("href")
-                driver.get(packContentLink)
-                wait.until(EC.presence_of_element_located((By.CLASS_NAME,"beatmap-pack-download__link")))
-                packContentHtml=driver.page_source.encode("utf-8")
-                packContentSoup=BeautifulSoup(packContentHtml,"html.parser")
-                packDownloadA=packContentSoup.find("a",class_="beatmap-pack-download__link")
+                packDownloadA = get_pack_download_a(driver, pack)
 
                 content="**初実行！**\nhttps://osu.ppy.sh/beatmaps/packs"
                 description="**"+packName+"**\n"+packDownloadA.get("href")
-
-                webhookUrl = os.environ["WEBHOOK_URL"]
-                payload = {
-                    "content": content,
-                    "embeds": [{
-                        "description": description,
-                        "color":15753632
-                    }],
-                }
-                headers = {"Content-Type": "application/json"}
-
-                requests.post(webhookUrl, json.dumps(payload), headers=headers)
+                send_notification(content, description)
 
                 break
         db_handler.updateNewTopBeatmapPack(topDataPackTag)
@@ -118,12 +130,7 @@ try:
             if any(words in packName.lower() for words in avoidWord):
                 pass
             else:
-                packContentLink = pack.a.get("href")
-                driver.get(packContentLink)
-                wait.until(EC.presence_of_element_located((By.CLASS_NAME,"beatmap-pack-download__link")))
-                packContentHtml = driver.page_source.encode("utf-8")
-                packContentSoup = BeautifulSoup(packContentHtml, "html.parser")
-                packDownloadA = packContentSoup.find("a",class_="beatmap-pack-download__link")
+                packDownloadA = get_pack_download_a(driver, pack)
 
                 description+="**"+packName+"**\n"+packDownloadA.get("href")+"\n"
                 
@@ -136,20 +143,12 @@ try:
             pass
         else:
             content=f"@everyone\n**ビートマップパック更新！**\nhttps://osu.ppy.sh/beatmaps/packs\n"
-
-            webhookUrl = os.environ["WEBHOOK_URL"]
-            payload={
-                "content":content,
-                "embeds":[{
-                    "description":description,
-                    "color": 15753632
-                }],
-            }
-            headers={"Content-Type": "application/json"}
-
-            requests.post(webhookUrl,json.dumps(payload),headers=headers)
+            send_notification(content, description)
 
     driver.quit()
 except Exception as e:
+    print(e.__class__.__name__)
+    print(e.args)
     print(e)
+    print(f"{e.__class__.__name__}: {e}")
     driver.quit()
