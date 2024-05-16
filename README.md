@@ -100,7 +100,7 @@ $ crontab -e
 ```
 から、毎時0分ごとに実行なら、最下部に
 ```cron
-0 * * * * cd OsuNewBeatmapPackNotification2Discord; rye run python main.py
+0 * * * * cd OsuNewBeatmapPackNotification2Discord; .venv/bin/python main.py
 ```
 を追加して上書き保存してください。<br>
 詳しくはcronの書き方を検索して調べてみてください。
