@@ -11,7 +11,7 @@ echo "WEBHOOK_URL=$WEBHOOK_URL">>.env
 
 sudo apt install chromium-chromedriver
 
-rye sync
-rye run python main.py
+uv sync
+uv run main.py
 
 echo Finish!
