@@ -12,11 +12,11 @@ Herokuでデプロイできるようにrequirements.txtとruntime.txtは入れ�
 
 ## Quick Start
 ```bash
-# Install Rye(Confirm the command on https://rye-up.com)
-$ curl -sSf https://rye-up.com/get | bash
+# Install uv(Confirm the command on https://docs.astral.sh/uv/)
+$ curl -LsSf https://astral.sh/uv/install.sh | sh
 # Comfirm
 $ apt -v
-$ rye version
+$ uv version
 # Clone
 $ sudo apt update
 $ sudo apt install git
@@ -31,15 +31,15 @@ $ crontab -e
 
 ## Step by Step
 ### 環境確認
-aptと[Rye](https://rye-up.com)が使えることが前提となります<br>
-Ryeは以下のコマンドでインストールできます。<br>
+aptと[uv](https://docs.astral.sh/uv/)が使えることが前提となります<br>
+uvは以下のコマンドでインストールできます。<br>
 コマンドが変更されているかもなので、実行前に一応ホームページで確認してください。<br>
 ```bash
-$ curl -sSf https://rye-up.com/get | bash
+$ curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 以下のコマンド確認できます。<br>
 ```bash
-$ rye version
+$ uv version
 $ apt -v
 ```
 
@@ -69,7 +69,7 @@ $ sudo apt install chromium-chromedriver
 
 2. 仮想環境作成・ライブラリインストール
 ```bash
-$ rye sync
+$ uv sync
 ```
 
 3. 環境変数設定
@@ -88,7 +88,7 @@ WEBHOOK_URL=[DiscordのwebhookのURL]
 4. 初回実行(テスト)
 ここまでうまく設定できていれば
 ```bash
-$ rye run python main.py
+$ uv run main.py
 ```
 を実行してみると通知がくるはずです。<br>
 通知が来ない場合は、ここまでうまくいっているか確認してみましょう。
@@ -118,3 +118,4 @@ Herokuで使用している機能が有料化されるそうなので、ラズ�
 サイトのHTMLの変更に対応しました(2023/3/10)<br>
 ログインにreCAPTCHAが必要になったので仮対応(2024/4/27)<br>
 Ryeに移行(2024/4/27)<br>
+Ryeからuvに移行(2024/10/31)
